@@ -1,4 +1,4 @@
-# GrapeFluid/Application
+# GrapeFluid/Application <img align="right" height="40px" src="https://developers.grapesc.cz/logo_inline.png">
 
 [![PHP from Packagist](https://img.shields.io/packagist/php-v/grape-fluid/application.svg?style=flat-square)](https://packagist.org/packages/grape-fluid/application)
 [![Licence](https://img.shields.io/packagist/l/grape-fluid/application.svg?style=flat-square)](https://packagist.org/packages/grape-fluid/application)
