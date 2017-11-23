@@ -1,0 +1,60 @@
+{if isset($sublayout) && $sublayout}
+	{import $sublayout}
+{/if}
+
+<!DOCTYPE html>
+<html lang="cs" n:class="!isset($sublayout) || !$sublayout ? no-layout">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	{foreach $meta AS $argumentName => $metas}
+		<meta n:foreach="$metas as $var => $val" {$argumentName}="{$var}" content="{$val}">
+	{/foreach}
+
+	<title>{ifset #title}{include #title|stripTags} | {/ifset}{$meta['name']['title']}</title>
+
+	{control assets:head}
+</head>
+
+<body n:class="!isset($sublayout) || !$sublayout ? no-layout">
+
+	{snippet flashMessages}
+		{ifset #flashMessages}
+			{include #flashMessages}
+		{else}
+		<div n:if="count($flashes)>0" id="fm" class="col-sm-3 col-sm-offset-9">
+			<div n:foreach="$flashes as $f" class='alert alert-{$f->type}'>
+				{switch $f->type}
+					{case "success"}
+						{var $icon = 'check'}
+					{case "warning"}
+						{var $icon = 'warning'}
+					{case "danger"}
+						{var $icon = 'warning'}
+					{default}
+						{var $icon = 'info-circle'}
+				{/switch}
+				<i class="fa fa-{$icon} fa-3x pull-left"></i> {$f->message}
+			</div>
+		</div>
+		{/ifset}
+	{/snippet}
+
+    {if isset($sublayout) && $sublayout}
+    	{include main}
+	{else}
+        {include content}
+    {/if}
+
+	{control assets:footer}
+
+	{block scripts}{/block}
+
+	{ifset editor}
+		{include editor}
+	{/ifset}
+
+    </body>
+</html>
