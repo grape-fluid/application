@@ -16,6 +16,10 @@
 	<title>{ifset #title}{include #title|stripTags} | {/ifset}{$meta['name']['title']}</title>
 
 	{control assets:head}
+
+	{ifset #head}
+		{include #head}
+	{/ifset}
 </head>
 
 <body n:class="!isset($sublayout) || !$sublayout ? no-layout">
