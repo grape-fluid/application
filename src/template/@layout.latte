@@ -15,7 +15,7 @@
 
 	<title>{ifset #title}{include #title|stripTags} | {/ifset}{$meta['name']['title']}</title>
 
-	{control assets:head}
+	{control assets:css}
 
 	{ifset #head}
 		{include #head}
@@ -52,7 +52,7 @@
         {include content}
     {/if}
 
-	{control assets:footer}
+	{control assets:js}
 
 	{block scripts}{/block}
 

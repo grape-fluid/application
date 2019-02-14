@@ -61,6 +61,9 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	/** @var NamespacesRepository @inject */
 	public $namespacesRepository;
 
+	/** @var AssetsControl @inject */
+	public $assetsControl;
+
 	/**	@var bool @persistent */
 	public $_noLayout = false;
 
@@ -138,7 +141,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 	public function createComponentAssets()
 	{
-		return new AssetsControl($this->assets, $this->setting, $this->scriptCollector);
+		return $this->assetsControl;
 	}
 
 
