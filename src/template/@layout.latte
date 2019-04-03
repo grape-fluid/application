@@ -25,25 +25,7 @@
 <body n:class="!isset($sublayout) || !$sublayout ? no-layout">
 
 	{snippet flashMessages}
-		{ifset #flashMessages}
-			{include #flashMessages}
-		{else}
-		<div n:if="count($flashes)>0" id="fm" class="col-sm-3 col-sm-offset-9">
-			<div n:foreach="$flashes as $f" class='alert alert-{$f->type}'>
-				{switch $f->type}
-					{case "success"}
-						{var $icon = 'check'}
-					{case "warning"}
-						{var $icon = 'warning'}
-					{case "danger"}
-						{var $icon = 'warning'}
-					{default}
-						{var $icon = 'info-circle'}
-				{/switch}
-				<i class="fa fa-{$icon} fa-3x pull-left"></i> {$f->message}
-			</div>
-		</div>
-		{/ifset}
+		{include $flashMessagesFile}
 	{/snippet}
 
     {if isset($sublayout) && $sublayout}

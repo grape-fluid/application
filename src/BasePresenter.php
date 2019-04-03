@@ -85,6 +85,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		parent::startup();
 		$this->setLayout(__DIR__ . DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR . '@layout.latte');
 		$this->setSubLayout($this->context->getParameters()['project']['layout']);
+		$this->setFlashMessagesFile($this->context->getParameters()['project']['flashes']);
 		$this->setMeta([
 			//cremeta foreachnout a nastavit
 			"title"       => $this->setting->getVal("core.meta.title"),
@@ -194,6 +195,16 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 
 
 	/**
+	 * @param string $path
+	 * @return void
+	 */
+	protected function setFlashMessagesFile($path)
+	{
+		$this->template->flashMessagesFile = $path;
+	}
+
+
+	/**
 	 * Flash zprava s podporou translatoru
 	 *
 	 * @param $message
@@ -202,6 +213,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	 */
 	public function flashMessage($message, $type = 'info')
 	{
+		$this->redrawControl("flashMessages");
 		return parent::flashMessage($this->translator->translate($message), $type);
 	}
 
