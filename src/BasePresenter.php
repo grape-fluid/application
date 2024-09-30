@@ -12,22 +12,26 @@ use Grapesc\GrapeFluid\ImageStorage;
 use Grapesc\GrapeFluid\LinkCollector\LinkCollector;
 use Grapesc\GrapeFluid\MagicControl\Creator;
 use Grapesc\GrapeFluid\MagicControl\MagicControl;
+use Grapesc\GrapeFluid\MagicControl\MagicControlMacro;
 use Grapesc\GrapeFluid\ModuleRepository;
 use Grapesc\GrapeFluid\ScriptCollector;
 use Grapesc\GrapeFluid\Security\NamespacesRepository;
+use Nette\Application\UI\Template;
 use Nette\Caching\Storages\FileStorage;
+use Nette;
+use Nette\DI\Container;
 use Nette\Forms\Form;
 
 
 abstract class BasePresenter extends \Nette\Application\UI\Presenter
 {
-	
+
 	/** @var Creator @inject */
 	public $magicControlCreator;
 
 	/** @var AssetRepository @inject */
 	public $assets;
-	
+
 	/** @var BaseParametersRepository @inject */
 	public $appParams;
 
@@ -64,14 +68,19 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	/** @var AssetsControl @inject */
 	public $assetsControl;
 
+	private $projectLayout;
+	private $projectFlashes;
+
 	/**	@var bool @persistent */
 	public $_noLayout = false;
 
 	/** @var string */
 	protected $defaultNamespace = 'frontend';
 
-
-	public function formatLayoutTemplateFiles()
+	/**
+	 * @return string[]
+	 */
+	public function formatLayoutTemplateFiles(): array
 	{
 		$list = parent::formatLayoutTemplateFiles();
 		//todo zkontrolovat
@@ -80,12 +89,20 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	}
 
 
+	public function injectParameters(Container $container)
+	{
+		$params = $container->getParameters();
+		$this->projectLayout = $params['project']['layout'];
+		$this->projectFlashes = $params['project']['flashes'];
+	}
+
+
 	protected function startup()
 	{
 		parent::startup();
 		$this->setLayout(__DIR__ . DIRECTORY_SEPARATOR . 'template' . DIRECTORY_SEPARATOR . '@layout.latte');
-		$this->setSubLayout($this->context->getParameters()['project']['layout']);
-		$this->setFlashMessagesFile($this->context->getParameters()['project']['flashes']);
+		$this->setSubLayout($this->projectLayout);
+		$this->setFlashMessagesFile($this->projectFlashes);
 		$this->setMeta([
 			//cremeta foreachnout a nastavit
 			"title"       => $this->setting->getVal("core.meta.title"),
@@ -108,7 +125,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	}
 
 
-	protected function createComponent($name)
+	protected function createComponent(string $name): ?Nette\ComponentModel\IComponent
 	{
 		if (substr($name, 0, 3) == 'mc_') {
 			$exploded = explode("_", $name);
@@ -131,7 +148,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	}
 
 
-	protected function createTemplate($class = NULL)
+	protected function createTemplate(?string $class = null): Template
 	{
 		/** @var \Nette\Bridges\ApplicationLatte\Template $template */
 		$template = parent::createTemplate();
@@ -211,7 +228,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	 * @param string $type
 	 * @return \stdClass
 	 */
-	public function flashMessage($message, $type = 'info')
+	public function flashMessage(string|\stdClass|\Stringable $message, string $type = 'info'): \stdClass
 	{
 		return parent::flashMessage($this->translator->translate($message), $type);
 	}
