@@ -74,6 +74,8 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 	/**	@var bool @persistent */
 	public $_noLayout = false;
 
+	protected ?Container $context = null;
+
 	/** @var string */
 	protected $defaultNamespace = 'frontend';
 
@@ -94,6 +96,7 @@ abstract class BasePresenter extends \Nette\Application\UI\Presenter
 		$params = $container->getParameters();
 		$this->projectLayout = $params['project']['layout'];
 		$this->projectFlashes = $params['project']['flashes'];
+		$this->context = $container;
 	}
 
 
